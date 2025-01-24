@@ -12,7 +12,7 @@ import com.eSun.votingSystem.components.DeleteResult;
 import com.eSun.votingSystem.components.InsertResult;
 import com.eSun.votingSystem.components.UpdateResult;
 import com.eSun.votingSystem.dao.VoteItemsDao;
-import com.eSun.votingSystem.dao.VoteItemsRepository;
+import com.eSun.votingSystem.repository.VoteItemsRepository;
 
 import jakarta.transaction.Transactional;
 
