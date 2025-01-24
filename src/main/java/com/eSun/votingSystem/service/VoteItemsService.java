@@ -1,12 +1,14 @@
 package com.eSun.votingSystem.service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import com.eSun.votingSystem.components.InsertResult;
 import com.eSun.votingSystem.dao.VoteItemsDao;
 import com.eSun.votingSystem.dao.VoteItemsRepository;
 
@@ -19,9 +21,22 @@ public class VoteItemsService {
 	@Autowired
 	private VoteItemsRepository itemsRepo;
 	
-	public VoteItemsDao saveItem(VoteItemsDao item) {
-		
-		return itemsRepo.save(item);
+	public InsertResult saveItem(VoteItemsDao item) {
+		try {
+			itemsRepo.save(item);
+			return InsertResult.SUCCESS;
+			
+		} catch(Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			if (e.getCause().getCause() instanceof SQLIntegrityConstraintViolationException) {
+				// 資料違反唯一約束
+				return InsertResult.DUPLICATE;
+				
+			} else {
+				// 其他Exception
+				return InsertResult.FAILURE;
+			}
+		}
 	}
 	
 	public VoteItemsDao findById(Integer id) {

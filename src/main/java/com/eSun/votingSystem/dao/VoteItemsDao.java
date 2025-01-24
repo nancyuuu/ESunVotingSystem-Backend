@@ -7,15 +7,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "vote_items")
 @Getter
 @Setter
-@NoArgsConstructor
-public class VoteItemsDao {
+@Table(name = "vote_items")
+public class VoteItemsDao extends BaseDao {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
