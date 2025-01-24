@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.eSun.votingSystem.components.DeleteResult;
 import com.eSun.votingSystem.components.InsertResult;
 import com.eSun.votingSystem.components.QueryResult;
+import com.eSun.votingSystem.components.UpdateResult;
 import com.eSun.votingSystem.dao.BaseDao;
 import com.eSun.votingSystem.dao.VoteItemsDao;
 import com.eSun.votingSystem.response.BaseResponse;
@@ -24,40 +26,37 @@ public class VoteItemsController extends BaseController {
 	
 	@PostMapping("/voteItem")
 	public BaseResponse addVoteItem(@RequestBody VoteItemsDao itemInfo) {
-		InsertResult result = itemService.saveItem(itemInfo);
-		return setInsertResponse(new BaseResponse(), result);
+		InsertResult resultType = itemService.saveItem(itemInfo);
+		
+		return setInsertResponse(new BaseResponse(), resultType);
 	}
 	
 	@GetMapping("/voteItem/{itemId}")
 	public BaseResponse showVoteItem(@PathVariable("itemId") Integer id) {
 		BaseDao result = itemService.findById(id);
 		BaseResponse returnBody = new BaseResponse(result);
+		
 		return setQueryResponse(returnBody, QueryResult.SUCCESS);
 	}
 	
 	@GetMapping("/voteItem")
 	public BaseResponse showAllVoteItem() {
 		BaseResponse returnBody = new BaseResponse(itemService.findAll());
+		
 		return setQueryResponse(returnBody, QueryResult.SUCCESS);
 	}
 	
 	@PutMapping("/voteItem")
-	public String editItem(@RequestBody VoteItemsDao item) {
-		boolean updateItem = itemService.updateItemDetail(item);
-		if(updateItem) {
-			return "update success";
-		}
-		return "update failed";
+	public BaseResponse editItem(@RequestBody VoteItemsDao item) {
+		UpdateResult resultType = itemService.updateItemDetail(item);
+		
+		return setUpdateResponse(new BaseResponse(), resultType);
 	}
 	
 	@DeleteMapping("/voteItem/{itemId}")
-	public String deleteItem(@PathVariable("itemId") Integer id) {
-		VoteItemsDao itemsDao = itemService.findById(id);
+	public BaseResponse deleteItem(@PathVariable("itemId") Integer id) {
+		DeleteResult resultType = itemService.deleteItemById(id);
 		
-		if(itemsDao != null) {
-			itemService.deleteItemById(id);
-			return "delete success";
-		}
-		return "delete failed";
+		return setDeleteResponse(new BaseResponse(), resultType);
 	}
 }

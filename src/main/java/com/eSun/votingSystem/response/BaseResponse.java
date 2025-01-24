@@ -24,12 +24,19 @@ public class BaseResponse implements Serializable {
 	public static final String STATUS_TYPE_FAILURE = "failure";
 	// Response Message - QUERY
 	public static final String STATUS_MSG_QUERY_SUCCESS = "查詢成功!";
+	public static final String STATUS_MSG_QUERY_EMPTY = "查無資料！";
 	public static final String STATUS_MSG_QUERY_FAILURE = "查詢失敗!";
 	// Response Message - INSERT
 	public static final String STATUS_MSG_CREATE_SUCCESS = "新增成功！";
 	public static final String STATUS_MSG_CREATE_FAILURE = "新增失敗！";
-	public static final String STATUS_MSG_DATA_DUPLICATED = "資料已存在。";
-	// Response Message - Update
+	public static final String STATUS_MSG_CREATE_DUPLICATED = "資料已存在。";
+	// Response Message - UPDATE
+	public static final String STATUS_MSG_UPDATE_SUCCESS = "更新成功！";
+	public static final String STATUS_MSG_UPDATE_FAILURE = "更新失敗！";
+	// Response Message - DELETE
+	public static final String STATUS_MSG_DELETE_SUCCESS = "刪除成功！";
+	public static final String STATUS_MSG_DELETE_EMPTY = "查無資料！";
+	public static final String STATUS_MSG_DELETE_FAILURE = "刪除失敗！";
 	
 	public BaseResponse() {
 		super();

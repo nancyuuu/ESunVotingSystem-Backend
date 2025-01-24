@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import com.eSun.votingSystem.components.DeleteResult;
 import com.eSun.votingSystem.components.InsertResult;
+import com.eSun.votingSystem.components.UpdateResult;
 import com.eSun.votingSystem.dao.VoteItemsDao;
 import com.eSun.votingSystem.dao.VoteItemsRepository;
 
@@ -53,7 +55,7 @@ public class VoteItemsService {
 		return itemsRepo.findAll();
 	}
 	
-	public boolean updateItemDetail(VoteItemsDao item) {
+	public UpdateResult updateItemDetail(VoteItemsDao item) {
 		
 		Optional<VoteItemsDao> optional = itemsRepo.findById(item.getId());
 		
@@ -61,14 +63,27 @@ public class VoteItemsService {
 			VoteItemsDao itemFromDB = optional.get();
 			itemFromDB.setItemName(item.getItemName());
 			itemsRepo.save(itemFromDB);
-			return true;
+			return UpdateResult.SUCCESS;
 		}
 		
-		return false;
+		return UpdateResult.FAILURE;
 	}
 	
-	public void deleteItemById(Integer id) {
-		itemsRepo.deleteById(id);
+	public DeleteResult deleteItemById(Integer id) {
+		VoteItemsDao itemsDao = findById(id);
+		if (itemsDao == null) {
+			return DeleteResult.EMPTY;
+		}
+		
+		try {
+			itemsRepo.deleteById(id);
+			return DeleteResult.SUCCESS;
+			
+		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			// TODO: Exception發生原因待確認
+			return DeleteResult.FAILURE;
+		}
 	}
 	
 }
