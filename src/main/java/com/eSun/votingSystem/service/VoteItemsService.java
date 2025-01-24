@@ -3,6 +3,7 @@ package com.eSun.votingSystem.service;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import com.eSun.votingSystem.components.DeleteResult;
 import com.eSun.votingSystem.components.InsertResult;
 import com.eSun.votingSystem.components.UpdateResult;
 import com.eSun.votingSystem.dao.VoteItemsDao;
+import com.eSun.votingSystem.dto.VoteItemsDto;
 import com.eSun.votingSystem.repository.VoteItemsRepository;
 
 import jakarta.transaction.Transactional;
@@ -41,18 +43,21 @@ public class VoteItemsService {
 		}
 	}
 	
-	public VoteItemsDao findById(Integer id) {
+	public VoteItemsDto findById(Integer id) {
 		Optional<VoteItemsDao> optional = itemsRepo.findById(id);
 		
 		if(optional.isPresent()) {
 			VoteItemsDao itemDao = optional.get();
-			return itemDao;
+			return new VoteItemsDto(itemDao);
 		}
 		return null;
 	}
 	
-	public List<VoteItemsDao> findAll() {
-		return itemsRepo.findAll();
+	public List<VoteItemsDto> findAll() {
+		List<VoteItemsDao> items = itemsRepo.findAll();
+		return items.stream()
+				.map(item -> new VoteItemsDto(item))
+				.collect(Collectors.toList());
 	}
 	
 	public UpdateResult updateItemDetail(VoteItemsDao item) {
@@ -70,7 +75,7 @@ public class VoteItemsService {
 	}
 	
 	public DeleteResult deleteItemById(Integer id) {
-		VoteItemsDao itemsDao = findById(id);
+		VoteItemsDto itemsDao = findById(id);
 		if (itemsDao == null) {
 			return DeleteResult.EMPTY;
 		}

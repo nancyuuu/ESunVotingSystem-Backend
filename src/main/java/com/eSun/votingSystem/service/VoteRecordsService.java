@@ -1,6 +1,8 @@
 package com.eSun.votingSystem.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.eSun.votingSystem.components.InsertResult;
 import com.eSun.votingSystem.dao.VoteItemsDao;
 import com.eSun.votingSystem.dao.VoteRecordsDao;
+import com.eSun.votingSystem.dto.VoteResultDto;
 import com.eSun.votingSystem.repository.VoteItemsRepository;
 import com.eSun.votingSystem.repository.VoteRecordsRepository;
 
@@ -32,4 +35,10 @@ public class VoteRecordsService {
 		return InsertResult.SUCCESS;
 	}
 	
+	public List<VoteResultDto> showAllResult() {
+		List<VoteItemsDao> items = itemsRepo.findAll();
+		return items.stream()
+				.map(item -> new VoteResultDto(item))
+				.collect(Collectors.toList());
+	}
 }

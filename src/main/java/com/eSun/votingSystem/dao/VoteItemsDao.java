@@ -20,7 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "vote_items")
-public class VoteItemsDao extends BaseDao {
+public class VoteItemsDao {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

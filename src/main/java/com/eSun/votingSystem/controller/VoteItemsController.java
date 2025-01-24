@@ -1,5 +1,7 @@
 package com.eSun.votingSystem.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +15,8 @@ import com.eSun.votingSystem.components.DeleteResult;
 import com.eSun.votingSystem.components.InsertResult;
 import com.eSun.votingSystem.components.QueryResult;
 import com.eSun.votingSystem.components.UpdateResult;
-import com.eSun.votingSystem.dao.BaseDao;
 import com.eSun.votingSystem.dao.VoteItemsDao;
+import com.eSun.votingSystem.dto.VoteItemsDto;
 import com.eSun.votingSystem.response.BaseResponse;
 import com.eSun.votingSystem.service.VoteItemsService;
 
@@ -33,17 +35,30 @@ public class VoteItemsController extends BaseController {
 	
 	@GetMapping("/voteItem/{itemId}")
 	public BaseResponse showVoteItem(@PathVariable("itemId") Integer id) {
-		BaseDao result = itemService.findById(id);
-		BaseResponse returnBody = new BaseResponse(result);
+		VoteItemsDto result = itemService.findById(id);
 		
-		return setQueryResponse(returnBody, QueryResult.SUCCESS);
+		if (result != null) {
+			BaseResponse returnBody = new BaseResponse(result);
+			return setQueryResponse(returnBody, QueryResult.SUCCESS);
+			
+		} else {
+			return setQueryResponse(new BaseResponse(), QueryResult.EMPTY);
+		}
+		
 	}
 	
 	@GetMapping("/voteItem")
 	public BaseResponse showAllVoteItem() {
-		BaseResponse returnBody = new BaseResponse(itemService.findAll());
+		List<VoteItemsDto> items = itemService.findAll();
 		
-		return setQueryResponse(returnBody, QueryResult.SUCCESS);
+		if (items != null && items.size() > 0) {
+			BaseResponse returnBody = new BaseResponse(itemService.findAll());
+			return setQueryResponse(returnBody, QueryResult.SUCCESS);
+			
+		} else {
+			return setQueryResponse(new BaseResponse(), QueryResult.EMPTY);
+		}
+		
 	}
 	
 	@PutMapping("/voteItem")

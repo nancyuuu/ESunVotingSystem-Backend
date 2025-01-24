@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.eSun.votingSystem.dao.BaseDao;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -42,17 +41,12 @@ public class BaseResponse implements Serializable {
 		super();
 	}
 	
-	public BaseResponse(BaseDao content) {
+	public BaseResponse(Object content) {
 		super();
-		if (content == null) {
-			this.content = new BaseDao();
-			
-		} else {
-			this.content = content;
-		}
+		this.content = content;
 	}
 	
-	public BaseResponse(List<? extends BaseDao> contents) {
+	public BaseResponse(List<? extends Object> contents) {
 		super();
 		this.contents = contents;
 	}
@@ -60,11 +54,11 @@ public class BaseResponse implements Serializable {
 	// Response Content
 	@JsonProperty("content")
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	private BaseDao content = null;
+	private Object content = null;
 
 	@JsonProperty("contents")
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	private List<? extends BaseDao> contents = null;
+	private List<? extends Object> contents = null;
 	
 	@JsonProperty("result_type")
 	private String result_type = "";
